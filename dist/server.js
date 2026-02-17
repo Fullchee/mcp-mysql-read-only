@@ -97,7 +97,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 }));
 server.setRequestHandler(CallToolRequestSchema, async (req) => {
     if (req.params.name !== "mysql_query") {
-        return { content: [{ type: "text", text: `Unknown tool: ${req.params.name}` }], isError: true };
+        return {
+            content: [{ type: "text", text: `Unknown tool: ${req.params.name}` }],
+            isError: true,
+        };
     }
     const sql = req.params.arguments?.sql;
     try {
@@ -105,12 +108,20 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
         const [rows] = await pool.query(sql);
         const elapsed = (performance.now() - start).toFixed(1);
         return {
-            content: [{ type: "text", text: JSON.stringify({ rows, elapsed_ms: elapsed }, null, 2) }],
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify({ rows, elapsed_ms: elapsed }, null, 2),
+                },
+            ],
         };
     }
     catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        return { content: [{ type: "text", text: `SQL Error: ${message}` }], isError: true };
+        return {
+            content: [{ type: "text", text: `SQL Error: ${message}` }],
+            isError: true,
+        };
     }
 });
 // ---------------------------------------------------------------------------
@@ -118,36 +129,55 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
 // ---------------------------------------------------------------------------
 async function ensureReadOnly() {
     try {
-        await pool.query('CREATE TEMPORARY TABLE _readonly_check (id INT)');
-        console.error('❌ Error: User has write privileges. Only read-only users are allowed.');
-        console.error('Please configure a MySQL user with SELECT-only permissions.');
-        process.exit(1);
+        const [rows] = await pool.query("SHOW GRANTS FOR CURRENT_USER()");
+        // Check if user has any write privileges
+        const writePrivileges = [
+            "INSERT",
+            "UPDATE",
+            "DELETE",
+            "CREATE",
+            "DROP",
+            "ALTER",
+            "INDEX",
+            "GRANT",
+        ];
+        const grantsText = rows
+            .map((r) => Object.values(r)[0])
+            .join(" ")
+            .toUpperCase();
+        const hasWritePrivilege = writePrivileges.some((priv) => grantsText.includes(`${priv} ON`) ||
+            grantsText.includes("ALL PRIVILEGES"));
+        if (hasWritePrivilege) {
+            console.error("❌ Error: User has write privileges. Only read-only users are allowed.");
+            console.error("Please configure a MySQL user with SELECT-only permissions.");
+            console.error("\nCurrent grants:");
+            rows.forEach((r) => console.error(`  ${Object.values(r)[0]}`));
+            process.exit(1);
+        }
+        console.error("✅ User is read-only");
     }
     catch (err) {
-        // Expected to fail for read-only users
         if (err instanceof Error) {
-            if (err.message.includes('denied')) {
-                console.error('✓ User is read-only');
-            }
-            else if ('code' in err && err.code === 'ECONNREFUSED') {
-                console.error('❌ Error: Cannot connect to MySQL database');
-                console.error(`Connection details: ${process.env.MYSQL_HOST ?? '127.0.0.1'}:${process.env.MYSQL_PORT ?? 3306}`);
-                console.error('Please check that:');
-                console.error('  - MySQL server is running');
-                console.error('  - MYSQL_HOST and MYSQL_PORT are correct');
-                console.error('  - Firewall allows the connection');
+            if ("code" in err && err.code === "ECONNREFUSED") {
+                console.error("❌ Error: Cannot connect to MySQL database");
+                console.error(`Connection details: ${process.env.MYSQL_HOST ?? "127.0.0.1"}:${process.env.MYSQL_PORT ?? 3306}`);
+                console.error("Please check that:");
+                console.error("  - MySQL server is running");
+                console.error("  - MYSQL_HOST and MYSQL_PORT are correct");
+                console.error("  - Firewall allows the connection");
                 throw err;
             }
-            else if ('code' in err && err.code === 'ER_ACCESS_DENIED_ERROR') {
-                console.error('❌ Error: Access denied to MySQL database');
-                console.error(`User: ${process.env.MYSQL_USER ?? 'root'}, Database: ${process.env.MYSQL_DATABASE ?? '(none)'}`);
-                console.error('Please check that MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE are correct');
+            else if ("code" in err &&
+                err.code === "ER_ACCESS_DENIED_ERROR") {
+                console.error("❌ Error: Access denied to MySQL database");
+                console.error(`User: ${process.env.MYSQL_USER ?? "root"}, Database: ${process.env.MYSQL_DATABASE ?? "(none)"}`);
+                console.error("Please check that MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE are correct");
                 throw err;
             }
-            else if ('code' in err && err.code === 'ER_BAD_DB_ERROR') {
-                console.error('❌ Error: Database does not exist');
-                console.error(`Database: ${process.env.MYSQL_DATABASE ?? '(none)'}`);
-                console.error('Please check that MYSQL_DATABASE is correct');
+            else if ("code" in err && err.code === "ER_BAD_DB_ERROR") {
+                console.error("❌ Error: Database does not exist");
+                console.error(`Database: ${process.env.MYSQL_DATABASE ?? "(none)"}`);
+                console.error("Please check that MYSQL_DATABASE is correct");
                 throw err;
             }
             else {
@@ -169,7 +199,7 @@ async function main() {
     console.error("MySQL MCP server running on stdio");
 }
 main().catch((err) => {
-    if (err instanceof Error && !('code' in err)) {
+    if (err instanceof Error && !("code" in err)) {
         console.error("❌ Fatal error:", err.message);
     }
     // Error details already logged by ensureReadOnly or other handlers
