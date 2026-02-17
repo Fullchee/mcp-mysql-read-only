@@ -22,4 +22,4 @@ pnpm watch
 ## Requirements
 
 - Node.js >= 24.0.0
-- pnpm >= 8.0.0
+- pnpm >= 10.0.0
