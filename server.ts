@@ -140,10 +140,30 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. Start the server
+// 5. Ensure read-only user
+// ---------------------------------------------------------------------------
+
+async function ensureReadOnly() {
+  try {
+    await pool.query('CREATE TEMPORARY TABLE _readonly_check (id INT)');
+    console.error('Error: User has write privileges. Only read-only users are allowed.');
+    process.exit(1);
+  } catch (err) {
+    // Expected to fail for read-only users
+    if (err instanceof Error && err.message.includes('denied')) {
+      console.error('✓ User is read-only');
+    } else {
+      throw err;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 6. Start the server
 // ---------------------------------------------------------------------------
 
 async function main() {
+  await ensureReadOnly();
   const transport = new StdioServerTransport();
   await mcpServer.connect(transport);
   console.error("MySQL MCP server running on stdio");
