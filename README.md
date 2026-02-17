@@ -1,4 +1,4 @@
-# MCP MySQL Monorepo
+# MCP servers Monorepo
 
 A monorepo for MCP (Model Context Protocol) tools.
 
