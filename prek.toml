@@ -1,3 +1,10 @@
-[hooks.pre-commit]
-paths = ["server.ts"]
-run = "pnpm build"
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "build"
+name = "Build TypeScript"
+entry = "pnpm build"
+language = "system"
+files = "server\\.ts$"
+pass_filenames = false

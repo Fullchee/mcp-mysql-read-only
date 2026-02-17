@@ -13,7 +13,12 @@
  *   MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
  */
 
-import "dotenv/config";
+// Load .env file using Node.js 24+ native support
+try {
+  process.loadEnvFile();
+} catch {
+  // .env file is optional
+}
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
