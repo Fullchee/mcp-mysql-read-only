@@ -6,9 +6,7 @@ settings:
 
 importers:
 
-  .: {}
-
-  packages/mysql-read-only:
+  .:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.26.0

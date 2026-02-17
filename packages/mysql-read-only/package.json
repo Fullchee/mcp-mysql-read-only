@@ -1,0 +1,26 @@
+{
+  "name": "mcp-server-mysql-read-only",
+  "version": "1.0.0",
+  "description": "Minimal MCP server for read-only access to MySQL",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/server.js",
+    "prepare": "prek install"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "mysql2": "^3.17.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@j178/prek": "^0.3.3",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
