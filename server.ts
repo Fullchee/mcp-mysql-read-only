@@ -181,11 +181,13 @@ async function ensureReadOnly() {
       .join(" ")
       .toUpperCase();
 
-    const hasWritePrivilege = writePrivileges.some(
-      (priv) =>
-        grantsText.includes(`${priv} ON`) ||
-        grantsText.includes("ALL PRIVILEGES"),
-    );
+    // Check for ALL PRIVILEGES or any write privilege using word boundaries
+    const hasWritePrivilege = grantsText.includes("ALL PRIVILEGES") ||
+      writePrivileges.some((priv) => {
+        // Use word boundary regex to match the privilege as a complete word
+        const regex = new RegExp(`\\b${priv}\\b`);
+        return regex.test(grantsText);
+      });
 
     if (hasWritePrivilege) {
       console.error(

@@ -145,8 +145,13 @@ async function ensureReadOnly() {
             .map((r) => Object.values(r)[0])
             .join(" ")
             .toUpperCase();
-        const hasWritePrivilege = writePrivileges.some((priv) => grantsText.includes(`${priv} ON`) ||
-            grantsText.includes("ALL PRIVILEGES"));
+        // Check for ALL PRIVILEGES or any write privilege using word boundaries
+        const hasWritePrivilege = grantsText.includes("ALL PRIVILEGES") ||
+            writePrivileges.some((priv) => {
+                // Use word boundary regex to match the privilege as a complete word
+                const regex = new RegExp(`\\b${priv}\\b`);
+                return regex.test(grantsText);
+            });
         if (hasWritePrivilege) {
             console.error("❌ Error: User has write privileges. Only read-only users are allowed.");
             console.error("Please configure a MySQL user with SELECT-only permissions.");
