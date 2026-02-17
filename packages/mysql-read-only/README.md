@@ -67,7 +67,7 @@ Add to your MCP config (e.g. `claude_desktop_config.json`):
 ## Project structure
 
 ```
-server.ts        ← the entire server (~130 lines)
+server.ts        ← the entire server
 package.json
 tsconfig.json
 prek.toml        ← pre-commit hook config
