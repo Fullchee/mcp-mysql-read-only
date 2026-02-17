@@ -1,4 +1,4 @@
-# mcp-server-minimal-read-only-mysql
+# mcp-server-mysql-read-only
 
 A minimal, single-file MCP server that gives LLMs read-only access to a MySQL database.
 
