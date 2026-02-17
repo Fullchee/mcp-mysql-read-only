@@ -1,6 +1,6 @@
 # MCP MySQL Monorepo
 
-A monorepo for MCP (Model Context Protocol) MySQL tools.
+A monorepo for MCP (Model Context Protocol) tools.
 
 ## Packages
 
