@@ -1,0 +1,21 @@
+{
+  "name": "mcp-server-mysql-minimal",
+  "version": "1.0.0",
+  "description": "Minimal MCP server for MySQL",
+  "type": "module",
+  "main": "dist/server.js",
+  "bin": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.1",
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.50",
+    "typescript": "^5.8.3"
+  }
+}
