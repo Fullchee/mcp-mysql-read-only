@@ -253,7 +253,15 @@ async function ensureReadOnly() {
 // ---------------------------------------------------------------------------
 
 async function main() {
-  await ensureReadOnly();
+  const allowWrites = process.env.DANGEROUSLY_ALLOW_WRITES === "true";
+
+  if (allowWrites) {
+    console.error("⚠️  DANGER: Write operations are enabled (DANGEROUSLY_ALLOW_WRITES=true)");
+    console.error("⚠️  The database user can modify data!");
+  } else {
+    await ensureReadOnly();
+  }
+
   const transport = new StdioServerTransport();
   await mcpServer.connect(transport);
   console.error("MySQL MCP server running on stdio");
