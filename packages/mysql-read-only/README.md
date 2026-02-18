@@ -35,13 +35,14 @@ Or if you have a `.env` file in the project directory, you can omit the `env` bl
 
 ### Environment variables
 
-| Variable         | Default     | Description                          |
-| ---------------- | ----------- | ------------------------------------ |
-| `MYSQL_HOST`     | `127.0.0.1` | MySQL host                           |
-| `MYSQL_PORT`     | `3306`      | MySQL port                           |
-| `MYSQL_USER`     | `readonly`  | MySQL user (use read-only user only) |
-| `MYSQL_PASSWORD` | _(empty)_   | MySQL password                       |
-| `MYSQL_DATABASE` | _(none)_    | Default database                     |
+| Variable                   | Default     | Description                                                  |
+| -------------------------- | ----------- | ------------------------------------------------------------ |
+| `MYSQL_HOST`               | `127.0.0.1` | MySQL host                                                   |
+| `MYSQL_PORT`               | `3306`      | MySQL port                                                   |
+| `MYSQL_USER`               | `readonly`  | MySQL user (use read-only user only)                         |
+| `MYSQL_PASSWORD`           | _(empty)_   | MySQL password                                               |
+| `MYSQL_DATABASE`           | _(none)_    | Default database                                             |
+| `DANGEROUSLY_ALLOW_WRITES` | `false`     | ⚠️ Skip read-only check (allows users with write privileges) |
 
 ## Setup
 
