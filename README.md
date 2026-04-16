@@ -1,63 +1,9 @@
-# mcp-mysql
+# MCP servers
 
-A minimal, single-file MCP server that gives LLMs read-only access to a MySQL database.
+- [`packages/mcp-mysql`](https://github.com/fullchee-citylitics/mcp-mysql-read-only/tree/main/packages/mcp-mysql) — MySQL MCP server
 
-> ⚠️ **Security Notice**: This server only works with read-only MySQL users. Never use users with write privileges.
+## Getting started
 
-## What it does
-
-- **`mysql_query` tool** — execute read-only SQL queries and get JSON results
-- **Resources** — browse all tables and inspect column schemas
-
-## Usage
-
-Paste this into your `.vscode/mcp.json`
-
-```json
-{
-  "servers": {
-    "local-mysql": {
-      "command": "node",
-      "args": [
-        "./packages/mcp-mysql/dist/mcp-mysql.js"
-      ],
-      "env": {
-        "MYSQL_HOST": "localhost",
-        "MYSQL_PORT": "3307",
-        "MYSQL_USER": "djangouser",
-        "MYSQL_PASS": "!B0^rxR*8E2SZO09bbrE",
-        "MYSQL_DB": "universe"
-      }
-    }
-  }
-}
-```
-
-Or if you have a `.env` file in the project directory, you can omit the `env` block.
-
-### Environment variables
-
-| Variable         | Default     | Description                          |
-| ---------------- | ----------- | ------------------------------------ |
-| `MYSQL_HOST`     | `127.0.0.1` | MySQL host                           |
-| `MYSQL_PORT`     | `3306`      | MySQL port                           |
-| `MYSQL_USER`     | `readonly`  | MySQL user (use read-only user only) |
-| `MYSQL_PASSWORD` | _(empty)_   | MySQL password                       |
-| `MYSQL_DATABASE` | _(none)_    | Default database                     |
-
-## Setup
-
-```bash
-pnpm install          # or npm install
-pnpm prepare
-cp .env.example .env  # edit with your MySQL credentials
-pnpm build
-```
-
-**Important**: Create a read-only MySQL user for this server:
-
-```sql
-CREATE USER 'readonly'@'localhost' IDENTIFIED BY 'your_password';
-GRANT SELECT ON your_database.* TO 'readonly'@'localhost';
-FLUSH PRIVILEGES;
-```
+1. Open `packages/mcp-mysql/README.md` for usage and setup instructions.
+2. Configure your `.vscode/mcp.json` to point to `./packages/mcp-mysql/dist/mcp-mysql.js`.
+3. Build the package with `pnpm build` from the repo root.

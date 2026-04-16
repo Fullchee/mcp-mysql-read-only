@@ -6,5 +6,5 @@ id = "build"
 name = "Build TypeScript"
 entry = "pnpm build"
 language = "system"
-files = "server\\.ts$"
+files = "mcp-mysql\\.ts$"
 pass_filenames = false

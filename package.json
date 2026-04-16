@@ -10,7 +10,6 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "pnpm --recursive build",
-    "start": "pnpm --filter mcp-mysql start"
+    "build": "pnpm --recursive build"
   }
 }
