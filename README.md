@@ -1,6 +1,6 @@
 # MCP servers
 
-- [`packages/mcp-mysql`](https://github.com/fullchee-citylitics/mcp-mysql-read-only/tree/main/packages/mcp-mysql) — MySQL MCP server
+- `packages/mcp-mysql` — MySQL MCP server
 
 ## Getting started
 
