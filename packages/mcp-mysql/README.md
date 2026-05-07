@@ -69,10 +69,20 @@ Paste this in your `.mcp.json`
 
 ## Setup
 
+### Automatic (recommended)
+
+From the repo root, run:
+
 ```bash
-pnpm install          # or npm install
-pnpm prepare
-cp .env.example .env  # edit with your MySQL credentials
+MYSQL_HOST=localhost MYSQL_USER=readonly MYSQL_DB=mydb pnpm install-mcp
+```
+
+This installs dependencies, builds the server, and registers `local-mysql` in both Claude Code (user scope) and GitHub Copilot. Supports `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `MYSQL_PASS`, `MYSQL_DB` env vars.
+
+### Manual
+
+```bash
+pnpm install
 pnpm build
 ```
 
