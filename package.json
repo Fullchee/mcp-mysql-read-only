@@ -11,6 +11,5 @@
   ],
   "scripts": {
     "build": "pnpm --recursive build",
-    "install-mcp": "bash scripts/install-mcp.sh"
   }
 }
