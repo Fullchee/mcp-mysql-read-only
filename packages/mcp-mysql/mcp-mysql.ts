@@ -190,18 +190,24 @@ async function ensureReadOnly() {
       });
 
     if (hasWritePrivilege) {
-      console.error(
-        "❌ Error: User has write privileges. Only read-only users are allowed.",
-      );
-      console.error(
-        "Please configure a MySQL user with SELECT-only permissions.",
-      );
-      console.error("\nCurrent grants:");
-      rows.forEach((r) => console.error(`  ${Object.values(r)[0]}`));
-      process.exit(1);
+      if (process.env.DANGEROUSLY_ALLOW_WRITES === "true") {
+        console.error(
+          "⚠️  Warning: User has write privileges. DANGEROUSLY_ALLOW_WRITES is enabled.",
+        );
+      } else {
+        console.error(
+          "❌ Error: User has write privileges. Only read-only users are allowed.",
+        );
+        console.error(
+          "Please configure a MySQL user with SELECT-only permissions.",
+        );
+        console.error("\nCurrent grants:");
+        rows.forEach((r) => console.error(`  ${Object.values(r)[0]}`));
+        process.exit(1);
+      }
+    } else {
+      console.error("✅ User is read-only");
     }
-
-    console.error("✅ User is read-only");
   } catch (err) {
     if (err instanceof Error) {
       if ("code" in err && (err as any).code === "ECONNREFUSED") {
